@@ -2,10 +2,8 @@
   "name": "craftdb-docsite",
   "version": "0.0.1",
   "description": "Documentation site for the craftdb project",
-  "main": "app.js",
-  "dependencies": {
-    "koa": "^2.0.0"
-  },
+  "main": "build.es6",
+  "dependencies": {},
   "devDependencies": {
     "babel-cli": "^6.8.0",
     "handlebars": "^4.0.5",
@@ -14,16 +12,14 @@
     "metalsmith-in-place": "^1.4.4",
     "metalsmith-layouts": "^1.6.5",
     "metalsmith-markdown": "^0.2.1",
-    "metalsmith-markdown-remarkable": "^0.1.1",
     "metalsmith-metadata": "0.0.4",
-    "metalsmith-partial": "^0.1.0",
     "pug": "^2.0.0-alpha6"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "craftdb"
+    "craftdb", "docs", "documentation"
   ],
   "author": "Paweł Bałaga",
   "license": "UNLICENSED"
