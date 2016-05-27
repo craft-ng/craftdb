@@ -1,0 +1,25 @@
+{
+  "name": "craftdb-docsite",
+  "description": "Documentation site for the craftdb project",
+  "main": "build.es6",
+  "authors": [
+    "Paweł Bałaga"
+  ],
+  "license": "UNLICENSED",
+  "keywords": [
+    "craftdb",
+    "docs",
+    "documentation"
+  ],
+  "homepage": "https://github.com/pbalaga/craftdb",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "scriptjs": "^2.5.8"
+  }
+}

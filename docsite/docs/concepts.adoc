@@ -1,0 +1,17 @@
+= craftdb manual
+Paweł Bałaga
+:doctype: book
+:icons: font
+ifndef::ebook-format[:leveloffset: 1]
+
+//++++
+//<link rel="stylesheet"  href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/3.1.0/css/font-awesome.min.css">
+//++++
+
+//[[chapter-one]]
+= manual part 1
+include::graphdb/introduction.adoc[]
+
+= manual part 2
+[TIP]
+My tip goes here
