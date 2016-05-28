@@ -47,8 +47,8 @@
 	// require('fontawesome');
 	// require('http://cdnjs.cloudflare.com/ajax/libs/font-awesome/3.1.0/css/font-awesome.min.css');
 	__webpack_require__(1);
+	//require('../stylesheets/font-awesome.css');
 	__webpack_require__(5);
-	//require('font-awesome/css/font-awesome.css');
 	// require(['../stylesheets/default.css'], function () {
 	//     console.log('css loaded');
 	// });
@@ -430,8 +430,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./font-awesome.css", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./font-awesome.css");
+			module.hot.accept("!!./../../css-loader/index.js!./font-awesome.css", function() {
+				var newContent = require("!!./../../css-loader/index.js!./font-awesome.css");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});

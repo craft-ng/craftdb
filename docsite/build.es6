@@ -75,7 +75,8 @@ var build = (options) => {
                     {test: /\.css$/, loader: 'style-loader!css-loader'},
                     //Regex provided by cchamberlain - see below link:
                     //https://github.com/webpack/less-loader/issues/53
-                    { test: /\.(eot|woff|woff2|ttf|svg|png|jpe?g|gif)(\?\S*)?$/
+                    {
+                        test: /\.(eot|woff|woff2|ttf|svg|png|jpe?g|gif)(\?\S*)?$/
                         , loader: 'url?limit=100000&name=[name].[ext]'
                     }
 
@@ -84,7 +85,13 @@ var build = (options) => {
             resolve: {
                 //https://github.com/webpack/webpack/issues/472
                 //http://www.unknownerror.org/opensource/webpack/webpack/q/stackoverflow/23305599/webpack-provideplugin-vs-externals
-                root: ['node_modules', 'bower_components']
+                //http://webpack.github.io/docs/configuration.html#resolve-root
+                //Root must be an absolute path, because otherwise webpack can't load submodules
+                //from modules located in node_modules, etc.
+                root: [
+                    path.join(__dirname, 'node_modules'),
+                    path.join(__dirname, 'bower_components')
+                ]
             },
             externals: {
                 //http://www.unknownerror.org/opensource/webpack/webpack/q/stackoverflow/23305599/webpack-provideplugin-vs-externals
