@@ -49,7 +49,7 @@ module.exports = function plugin(options) {
             var opts = asciidocObject.Opal.hash2(['base_dir', 'safe', 'attributes', 'doctype', 'backend'], {
                 'base_dir': metalsmith.source(),
                 'safe': 'safe',
-                'attributes': ['showtitle', 'linkcss'],
+                'attributes': ['showtitle', 'linkcss', 'icons=font@' ],
                 'doctype': 'article',
                 'backend': 'html5',
             });

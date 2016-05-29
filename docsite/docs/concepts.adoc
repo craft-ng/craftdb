@@ -12,6 +12,8 @@ ifndef::ebook-format[:leveloffset: 1]
 = manual part 1
 include::graphdb/introduction.adoc[]
 
+include::preliminary-warning.adoc[]
+
 = manual part 2
 [TIP]
 My tip goes here

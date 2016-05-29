@@ -58,7 +58,22 @@ var build = (options) => {
         .source('./docs')
         .destination(options.buildDestination)
         .use(asciidoc())
-        .use(layouts({engine: 'jade', default: 'main.jade'}))
+        .use(function (files, metal, done) {
+            console.log('before layouts');
+            console.log(metal.metadata());
+            done();
+        })
+        .use(layouts({engine: 'jade', default: 'main.jade', locals: {local1: 'local1'}}))
+        .use(function (files, metal, done) {
+            console.log('after layouts');
+            console.log(metal.metadata());
+            done();
+        })
+        .use(function (files, metal, done) {
+            console.log('before webpack');
+            console.log(files);
+            done();
+        })
         .use(metalsmithWebpack({
             context: path.join(__dirname, 'assets'),
             entry: {
@@ -107,6 +122,11 @@ var build = (options) => {
                 // ], {copyUnmodified: true})
             ]
         }))
+        .use(function (files, metal, done) {
+            console.log('after webpack');
+            console.log(files);
+            done();
+        })
         .build(err => {
             if (err) console.log(err);
             else {

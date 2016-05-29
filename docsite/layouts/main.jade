@@ -4,4 +4,8 @@ html
         script(src='/scripts/style-loader.js')
     body
         div.content!=contents
-        include preliminary-warning
+        div.x #{locals.local1} a
+        //include preliminary-warning.html
+        //include ../assets/preliminary-warning.html
+        //each x in partials
+        //    span #{x}
