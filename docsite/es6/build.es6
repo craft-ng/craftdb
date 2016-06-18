@@ -17,12 +17,13 @@ const http = require('http');
 const finalhandler = require('finalhandler');
 const serveStatic = require('serve-static');
 const extend = require('extend');
+const portInUse = require('./lib/plugins/port-in-use');
 
-var setupWatcher = () =>
+var setupWatcher = (options) =>
     gaze(['docs/**/*.*', 'layouts/**/*.*', 'assets/**/*.*'], function (err, watcher) {
         watcher.on('all', function (event, filepath) {
-            console.log(`File ${filepath} changed. Triggering events.`)
-            build();
+            console.log(`File ${filepath} changed. Triggering events.`);
+            build(options.buildOptions);
         });
     });
 
@@ -32,29 +33,39 @@ var setupServer = (options) => {
         port: 8080
     }, options);
 
-    var serve = serveStatic(options.directory);
 
-    console.log('Starting static server');
+    portInUse(8080, isInUse=>{
+        if(isInUse) console.log('Port ' + options.port + ' is in use. Static server will not be restarted');
+        else {
+            console.log('Port ' + options.port + ' is not in use. ');
 
-    var server = http.createServer(function (req, res) {
-        var done = finalhandler(req, res);
-        serve(req, res, done);
+            var serve = serveStatic(options.directory);
+
+            console.log('Starting static server');
+
+            var server = http.createServer(function (req, res) {
+                var done = finalhandler(req, res);
+                serve(req, res, done);
+            });
+
+            server.listen(options.port);
+            console.log('Server listening on port ' + options.port);
+        }
     });
 
-    server.listen(options.port);
-    console.log('Server listening on port ' + options.port);
 };
 
 var build = (options) => {
     console.log('Build started');
 
     options = extend({
+        rootDirectory: __dirname,
         buildDestination: './build',
         callback: ()=> {
         }
-    });
+    }, options);
 
-    Metalsmith(__dirname)
+    Metalsmith(options.rootDirectory)
         .source('./docs')
         .destination(options.buildDestination)
         .use(asciidoc())
@@ -75,13 +86,13 @@ var build = (options) => {
             done();
         })
         .use(metalsmithWebpack({
-            context: path.join(__dirname, 'assets'),
+            context: path.join(options.rootDirectory, 'assets'),
             entry: {
                 //'style-default': './stylesheets/default.css',
                 'style-loader': './scripts/style-loader.js'
             },
             output: {
-                path: path.resolve(__dirname, options.buildDestination, 'scripts'),
+                path: path.resolve(options.rootDirectory, options.buildDestination, 'scripts'),
                 filename: '[name].js',
                 publicPath: '/assets/'
             },
@@ -104,8 +115,8 @@ var build = (options) => {
                 //Root must be an absolute path, because otherwise webpack can't load submodules
                 //from modules located in node_modules, etc.
                 root: [
-                    path.join(__dirname, 'node_modules'),
-                    path.join(__dirname, 'bower_components')
+                    path.join(options.rootDirectory, 'node_modules'),
+                    path.join(options.rootDirectory, 'bower_components')
                 ]
             },
             externals: {
@@ -128,7 +139,7 @@ var build = (options) => {
             done();
         })
         .build(err => {
-            if (err) console.log(err);
+            if (err) throw err;
             else {
                 console.log('Build complete!');
                 options.callback();
@@ -137,11 +148,12 @@ var build = (options) => {
 };
 
 var config = {
+    rootDirectory: path.resolve(__dirname, '..'),
     buildDestination: './build'
 };
 
 build(config);
 setupServer({directory: config.buildDestination});
-setupWatcher();
+setupWatcher({buildOptions: config});
 
 
