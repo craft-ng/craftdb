@@ -10,10 +10,13 @@
   "devDependencies": {
     "asciidoctor.js": "^1.5.5-1",
     "babel-cli": "^6.9.0",
+    "babel-polyfill": "^6.9.1",
     "babel-preset-es2015": "^6.9.0",
     "bower-webpack-plugin": "^0.1.9",
     "copy-webpack-plugin": "^3.0.0",
     "css-loader": "^0.23.1",
+    "death": "^1.0.0",
+    "epipebomb": "^0.1.1",
     "extend": "^3.0.0",
     "file-loader": "^0.8.5",
     "finalhandler": "^0.4.1",
@@ -42,7 +45,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "node transpile.es6 && node bin/build.js",
-    "develop": "$(npm bin)/supervisor -e js,es6 -i bin,assets,build -n error -x npm -- run build"
+    "develop": "$(npm bin)/supervisor -e js,es6,json -i bin,assets,build -n error -x npm -- run build",
+    "develop2": "$(npm bin)/supervisor -e js,es6,json -i bin,assets,build -n error -x node -- es6/develop.es6"
   },
   "keywords": [
     "craftdb",

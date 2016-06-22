@@ -38,7 +38,7 @@ var setupServer = function setupServer(options) {
 
     portInUse(8080, function (isInUse) {
         if (isInUse) console.log('Port ' + options.port + ' is in use. Static server will not be restarted');else {
-            console.log('Port ' + options.port + ' is not in use. ');
+            console.log('Port ' + options.port + ' is not in use.');
 
             var serve = serveStatic(options.directory);
 
