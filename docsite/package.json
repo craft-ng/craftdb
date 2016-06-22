@@ -16,6 +16,7 @@
     "copy-webpack-plugin": "^3.0.0",
     "css-loader": "^0.23.1",
     "death": "^1.0.0",
+    "dedent": "^0.6.0",
     "epipebomb": "^0.1.1",
     "extend": "^3.0.0",
     "file-loader": "^0.8.5",
@@ -46,7 +47,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "node transpile.es6 && node bin/build.js",
     "develop": "$(npm bin)/supervisor -e js,es6,json -i bin,assets,build -n error -x npm -- run build",
-    "develop2": "$(npm bin)/supervisor -e js,es6,json -i bin,assets,build -n error -x node -- es6/develop.es6"
+    "develop2": "node transpile.es6 && $(npm bin)/supervisor -e js,es6,json -i bin,assets,build -n error -x node -- bin/develop.js"
   },
   "keywords": [
     "craftdb",
