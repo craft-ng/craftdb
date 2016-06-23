@@ -19,43 +19,14 @@ const serveStatic = require('serve-static');
 const extend = require('extend');
 const portInUse = require('./lib/plugins/port-in-use');
 
-var setupWatcher = (options) =>
-    gaze(['docs/**/*.*', 'layouts/**/*.*', 'assets/**/*.*'], function (err, watcher) {
-        watcher.on('all', function (event, filepath) {
-            console.log(`File ${filepath} changed. Triggering events.`);
-            build(options.buildOptions);
-        });
-    });
+var config = {
+    rootDirectory: path.resolve(__dirname, '..'),
+    buildDestination: './build'
+};;
 
-var setupServer = (options) => {
-    var options = extend({
-        directory: './build',
-        port: 8080
-    }, options);
+export {build, config} ;
 
-
-    portInUse(8080, isInUse=>{
-        if(isInUse) console.log('Port ' + options.port + ' is in use. Static server will not be restarted');
-        else {
-            console.log('Port ' + options.port + ' is not in use.');
-
-            var serve = serveStatic(options.directory);
-
-            console.log('Starting static server');
-
-            var server = http.createServer(function (req, res) {
-                var done = finalhandler(req, res);
-                serve(req, res, done);
-            });
-
-            server.listen(options.port);
-            console.log('Server listening on port ' + options.port);
-        }
-    });
-
-};
-
-var build = (options) => {
+function build(options) {
     console.log('Build started');
 
     options = extend({
@@ -147,13 +118,13 @@ var build = (options) => {
         });
 };
 
-var config = {
-    rootDirectory: path.resolve(__dirname, '..'),
-    buildDestination: './build'
-};
+// var config = {
+//     rootDirectory: path.resolve(__dirname, '..'),
+//     buildDestination: './build'
+// };
 
-build(config);
-setupServer({directory: config.buildDestination});
-setupWatcher({buildOptions: config});
+// build(config);
+// setupServer({directory: config.buildDestination});
+// setupWatcher({buildOptions: config});
 
 

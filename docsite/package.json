@@ -47,7 +47,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "node transpile.es6 && node bin/build.js",
     "develop": "$(npm bin)/supervisor -e js,es6,json -i bin,assets,build -n error -x npm -- run build",
-    "develop2": "node transpile.es6 && $(npm bin)/supervisor -e js,es6,json -i bin,assets,build -n error -x node -- bin/develop.js"
+    "develop2": "node es6/transpile.es6 && $(npm bin)/supervisor -e js,es6,json -i bin,assets,build -x node -- bin/develop.js"
   },
   "keywords": [
     "craftdb",

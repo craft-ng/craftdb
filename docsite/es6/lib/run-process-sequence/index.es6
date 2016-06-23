@@ -2,7 +2,7 @@ require('babel-polyfill'); // required for using Promises
 
 const suppressEpipe = require('epipebomb');
 const childProcess = require('child_process');
-const onDeath = require('death');
+const onDeath = require('death')({debug:true});
 const dedent = require('dedent');
 
 export default runProcessSequence;
@@ -17,6 +17,7 @@ function runProcess(cmd, args, doneCallback) {
 
     child.on('exit', function (code) {
         console.log(`Process '${cmd}' exited with code ${code}.`);
+        runningProcess = undefined;
 
         doneCallback();
     });
@@ -44,18 +45,30 @@ function runProcessSequence(tasks) {
                            Error: ${reason}`);
             });
     });
+
+    return promise;
 }
 
-onDeath(function (signal, err) {
-    console.log(dedent`Process originating in file '${__filename}' dies after receiving signal '${signal}'. 
-                       Error info: ${err}`);
-
-    if (runningProcess) {
-        console.log('Killing child process');
-        runningProcess.kill(signal);
-        runningProcess = undefined;
-    }
-});
+// onDeath(function (signal, err) {
+//     console.log(dedent`Process that was spawned with args ${process.spawnargs}, PID=${process.pid}
+//                        dies after receiving signal '${signal}'. Error info: ${err}`);
+//
+//     if (runningProcess) {
+//         console.log('Killing child process');
+//
+//         var x = runningProcess;
+//
+//         runningProcess.exit(1);
+//
+//         // runningProcess.kill();
+//         console.log(`killed= ${x.killed}, spawnargs=${x.spawnargs}, pid = ${x.pid}`);
+//         runningProcess = undefined;
+//         console.log('Process killed');
+//     }
+//     else{
+//         console.log('No child process running');
+//     }
+// });
 
 // https://github.com/mhart/epipebomb:
 // By default, node throws EPIPE errors if process.stdout is being written to

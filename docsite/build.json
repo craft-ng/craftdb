@@ -1,0 +1,4 @@
+{
+  "rootDirectory": path.resolve(__dirname, '..'),
+  "buildDestination": './build'
+};
