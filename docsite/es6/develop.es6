@@ -9,7 +9,7 @@ process.on('unhandledRejection', function (error, promise) {
 });
 
 var isBuilt = runProcessSequence([
-    {cmd: 'node', args: ['transpile.es6']},
+    {cmd: 'node', args: ['es6/transpile.es6']},
 ])
     .then(function () {
         return new Promise((resolve, reject)=> {

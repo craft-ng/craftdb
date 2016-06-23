@@ -118,13 +118,4 @@ function build(options) {
         });
 };
 
-// var config = {
-//     rootDirectory: path.resolve(__dirname, '..'),
-//     buildDestination: './build'
-// };
-
-// build(config);
-// setupServer({directory: config.buildDestination});
-// setupWatcher({buildOptions: config});
-
 
