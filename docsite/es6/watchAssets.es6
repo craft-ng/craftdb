@@ -12,4 +12,6 @@ export default function watch(options) {
             build(options.buildOptions || defaultBuildConfig);
         });
     });
+
+    console.log('Asset watcher configured');
 }
