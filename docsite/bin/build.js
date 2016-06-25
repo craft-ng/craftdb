@@ -3,30 +3,49 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-var Metalsmith = require('metalsmith');
-var handlebars = require('handlebars');
-var inplace = require('metalsmith-in-place');
-var markdown = require('metalsmith-markdown');
-var layouts = require('metalsmith-layouts');
-var asciidoc = require('./lib/plugins/asciidoc'); // require('metalsmith-asciidoc');
-var serve = require('metalsmith-serve');
-var gaze = require('gaze');
-var metalsmithWebpack = require('metalsmith-webpack');
-var webpack = require('webpack');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
-var BowerWebpackPlugin = require('bower-webpack-plugin');
-//require("font-awesome-webpack");
-var path = require('path');
+exports.config = exports.build = undefined;
 
-var http = require('http');
-var finalhandler = require('finalhandler');
-var serveStatic = require('serve-static');
-var extend = require('extend');
-var portInUse = require('./lib/plugins/port-in-use');
+var _metalsmith = require('metalsmith');
+
+var _metalsmith2 = _interopRequireDefault(_metalsmith);
+
+var _metalsmithLayouts = require('metalsmith-layouts');
+
+var _metalsmithLayouts2 = _interopRequireDefault(_metalsmithLayouts);
+
+var _asciidoc = require('./lib/plugins/asciidoc');
+
+var _asciidoc2 = _interopRequireDefault(_asciidoc);
+
+var _metalsmithWebpack = require('metalsmith-webpack');
+
+var _metalsmithWebpack2 = _interopRequireDefault(_metalsmithWebpack);
+
+var _webpack = require('webpack');
+
+var _webpack2 = _interopRequireDefault(_webpack);
+
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
+var _extend = require('extend');
+
+var _extend2 = _interopRequireDefault(_extend);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var config = {
-    rootDirectory: path.resolve(__dirname, '..')
-};
+    rootDirectory: _path2.default.resolve(__dirname, '..')
+}; // const handlebars = require('handlebars');
+// const layouts = require('metalsmith-layouts');
+// const asciidoc = require('./lib/plugins/asciidoc'); // require('metalsmith-asciidoc');
+// const metalsmithWebpack = require('metalsmith-webpack');
+// const webpack = require('webpack');
+// //require("font-awesome-webpack");
+// const path = require('path');
+
+// const extend = require('extend');
 
 exports.build = build;
 exports.config = config;
@@ -35,7 +54,7 @@ exports.config = config;
 function build(options) {
     console.log('Build started');
 
-    options = extend({
+    options = (0, _extend2.default)({
         rootDirectory: __dirname,
         buildDestination: './build',
         docsSubdirectory: './docs',
@@ -43,14 +62,14 @@ function build(options) {
         callback: function callback() {}
     }, options);
 
-    Metalsmith(options.rootDirectory).source('./docs').destination(path.join(options.buildDestination, options.docsSubdirectory)).use(asciidoc()).use(layouts({ engine: 'jade', default: 'main.jade' })).use(metalsmithWebpack({
-        context: path.join(options.rootDirectory, 'assets'),
+    (0, _metalsmith2.default)(options.rootDirectory).source('./docs').destination(_path2.default.join(options.buildDestination, options.docsSubdirectory)).use((0, _asciidoc2.default)()).use((0, _metalsmithLayouts2.default)({ engine: 'jade', default: 'main.jade' })).use((0, _metalsmithWebpack2.default)({
+        context: _path2.default.join(options.rootDirectory, 'assets'),
         entry: {
             //'style-default': './stylesheets/default.css',
             'style-loader': './scripts/style-loader.js'
         },
         output: {
-            path: path.resolve(options.rootDirectory, options.buildDestination, options.scriptsSubdirectory),
+            path: _path2.default.resolve(options.rootDirectory, options.buildDestination, options.scriptsSubdirectory),
             filename: '[name].js',
             publicPath: '/assets/'
         },
@@ -69,19 +88,13 @@ function build(options) {
             //http://webpack.github.io/docs/configuration.html#resolve-root
             //Root must be an absolute path, because otherwise webpack can't load submodules
             //from modules located in node_modules, etc.
-            root: [path.join(options.rootDirectory, 'node_modules'), path.join(options.rootDirectory, 'bower_components')]
+            root: [_path2.default.join(options.rootDirectory, 'node_modules'), _path2.default.join(options.rootDirectory, 'bower_components')]
         },
         externals: {
             //http://www.unknownerror.org/opensource/webpack/webpack/q/stackoverflow/23305599/webpack-provideplugin-vs-externals
             //fontawesome: 'fontawesome'
         },
-        plugins: [
-        //new BowerWebpackPlugin()
-        new webpack.ResolverPlugin(new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin('bower.json', ['main']))
-        // new CopyWebpackPlugin([
-        //     {from: './**/*.css'}
-        // ], {copyUnmodified: true})
-        ]
+        plugins: [new _webpack2.default.ResolverPlugin(new _webpack2.default.ResolverPlugin.DirectoryDescriptionFilePlugin('bower.json', ['main']))]
     })).build(function (err) {
         if (err) throw err;else {
             console.log('Build complete!');

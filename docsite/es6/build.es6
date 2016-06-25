@@ -1,29 +1,16 @@
-const Metalsmith = require('metalsmith');
-const handlebars = require('handlebars');
-const inplace = require('metalsmith-in-place');
-const markdown = require('metalsmith-markdown');
-const layouts = require('metalsmith-layouts');
-const asciidoc = require('./lib/plugins/asciidoc'); // require('metalsmith-asciidoc');
-const serve = require('metalsmith-serve');
-const gaze = require('gaze');
-const metalsmithWebpack = require('metalsmith-webpack');
-const webpack = require('webpack');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const BowerWebpackPlugin = require('bower-webpack-plugin');
-//require("font-awesome-webpack");
-const path = require('path');
-
-const http = require('http');
-const finalhandler = require('finalhandler');
-const serveStatic = require('serve-static');
-const extend = require('extend');
-const portInUse = require('./lib/plugins/port-in-use');
+import Metalsmith from 'metalsmith';
+import layouts from 'metalsmith-layouts';
+import asciidoc from './lib/plugins/asciidoc';
+import metalsmithWebpack from 'metalsmith-webpack';
+import webpack from 'webpack';
+import path from 'path';
+import extend from 'extend';
 
 var config = {
     rootDirectory: path.resolve(__dirname, '..')
 };
 
-export {build, config} ;
+export {build, config};
 
 function build(options) {
     console.log('Build started');
@@ -81,13 +68,9 @@ function build(options) {
                 //fontawesome: 'fontawesome'
             },
             plugins: [
-                //new BowerWebpackPlugin()
                 new webpack.ResolverPlugin(
                     new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin('bower.json', ['main'])
                 )
-                // new CopyWebpackPlugin([
-                //     {from: './**/*.css'}
-                // ], {copyUnmodified: true})
             ]
         }))
         .build(err => {
