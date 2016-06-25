@@ -11,7 +11,7 @@ module.exports = function (options) {
     }, options);
 
     return function (err) {
-        if(err) opts.error(err);
+        if (err) opts.error(err);
         else opts.success();
-    }
+    };
 };

@@ -2,7 +2,7 @@ require('babel-polyfill'); // required for using Promises
 
 const suppressEpipe = require('epipebomb');
 const childProcess = require('child_process');
-const onDeath = require('death')({debug:true});
+const onDeath = require('death')();
 const dedent = require('dedent');
 
 export default runProcessSequence;

@@ -2,6 +2,7 @@
 Paweł Bałaga
 :doctype: book
 :icons: font
+:toc:
 ifndef::ebook-format[:leveloffset: 1]
 
 //++++

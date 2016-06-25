@@ -20,9 +20,8 @@ const extend = require('extend');
 const portInUse = require('./lib/plugins/port-in-use');
 
 var config = {
-    rootDirectory: path.resolve(__dirname, '..'),
-    buildDestination: './build'
-};;
+    rootDirectory: path.resolve(__dirname, '..')
+};
 
 export {build, config} ;
 
@@ -32,30 +31,17 @@ function build(options) {
     options = extend({
         rootDirectory: __dirname,
         buildDestination: './build',
+        docsSubdirectory: './docs',
+        scriptsSubdirectory: './scripts',
         callback: ()=> {
         }
     }, options);
 
     Metalsmith(options.rootDirectory)
         .source('./docs')
-        .destination(options.buildDestination)
+        .destination(path.join(options.buildDestination, options.docsSubdirectory))
         .use(asciidoc())
-        .use(function (files, metal, done) {
-            console.log('before layouts');
-            console.log(metal.metadata());
-            done();
-        })
-        .use(layouts({engine: 'jade', default: 'main.jade', locals: {local1: 'local1'}}))
-        .use(function (files, metal, done) {
-            console.log('after layouts');
-            console.log(metal.metadata());
-            done();
-        })
-        .use(function (files, metal, done) {
-            console.log('before webpack');
-            console.log(files);
-            done();
-        })
+        .use(layouts({engine: 'jade', default: 'main.jade'}))
         .use(metalsmithWebpack({
             context: path.join(options.rootDirectory, 'assets'),
             entry: {
@@ -63,7 +49,7 @@ function build(options) {
                 'style-loader': './scripts/style-loader.js'
             },
             output: {
-                path: path.resolve(options.rootDirectory, options.buildDestination, 'scripts'),
+                path: path.resolve(options.rootDirectory, options.buildDestination, options.scriptsSubdirectory),
                 filename: '[name].js',
                 publicPath: '/assets/'
             },
@@ -104,11 +90,6 @@ function build(options) {
                 // ], {copyUnmodified: true})
             ]
         }))
-        .use(function (files, metal, done) {
-            console.log('after webpack');
-            console.log(files);
-            done();
-        })
         .build(err => {
             if (err) throw err;
             else {
