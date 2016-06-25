@@ -37,15 +37,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var config = {
     rootDirectory: _path2.default.resolve(__dirname, '..')
-}; // const handlebars = require('handlebars');
-// const layouts = require('metalsmith-layouts');
-// const asciidoc = require('./lib/plugins/asciidoc'); // require('metalsmith-asciidoc');
-// const metalsmithWebpack = require('metalsmith-webpack');
-// const webpack = require('webpack');
-// //require("font-awesome-webpack");
-// const path = require('path');
-
-// const extend = require('extend');
+};
 
 exports.build = build;
 exports.config = config;

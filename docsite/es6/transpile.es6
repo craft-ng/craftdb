@@ -1,3 +1,6 @@
+//The require calls cannot be replaced with es6 imports,
+//because this file is run by node directly, e.g. 'node transpile.es6'.
+//Node (specifically v8) does not support es6-style imports.
 const Metalsmith = require('metalsmith');
 const babel = require('metalsmith-babel');
 const rename = require('metalsmith-rename');

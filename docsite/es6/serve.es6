@@ -1,8 +1,8 @@
-const http = require('http');
-const finalhandler = require('finalhandler');
-const serveStatic = require('serve-static');
-const extend = require('extend');
-const portInUse = require('./lib/plugins/port-in-use');
+import http from 'http';
+import finalhandler from 'finalhandler';
+import serveStatic from 'serve-static';
+import portInUse from './lib/plugins/port-in-use';
+import extend from 'extend';
 
 export default function serve(options) {
     var options = extend({
