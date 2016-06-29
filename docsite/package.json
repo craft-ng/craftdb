@@ -47,7 +47,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "node es6/transpile.es6 && node bin/build.js",
+    "build": "node es6/transpile.es6 && node bin/build-execute.js",
     "develop": "node es6/transpile.es6 && $(npm bin)/supervisor -e js,es6,json -i bin,assets,build -x node -- bin/develop.js"
   },
   "keywords": [
