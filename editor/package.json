@@ -1,0 +1,25 @@
+{
+  "name": "craftdb-editor",
+  "version": "0.0.1",
+  "description": "Graph editor for the craftdb project",
+  "main": "dist/app.js",
+  "dependencies": {
+    "koa": "^2.0.0"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-typescript": "^2.13.6"
+  },
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "craft",
+    "craftdb",
+    "graph",
+    "graph",
+    "editor"
+  ],
+  "author": "Pawel Balaga",
+  "license": "To be determined"
+}
