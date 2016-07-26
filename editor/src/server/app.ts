@@ -1,7 +1,8 @@
-//import * as Koa from 'koa';
-
+// import * as Koa from 'koa';
 import Koa = require("koa");
-const app = new Koa();
+
+// import Koa = require("koa");
+const app:Koa = new Koa();
 
 app.use((ctx:Koa.Context, next:Function)=> {
     ctx.body = 'Hello';

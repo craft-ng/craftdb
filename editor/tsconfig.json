@@ -6,7 +6,8 @@
   },
   "files":[
     "typings/tsd.d.ts",
-    "app.ts"
+    "src/server/app.ts",
+    "src/client/app.ts"
   ],
   "exclude": [
     "node_modules"
