@@ -1,4 +1,5 @@
 var gulp = require('gulp');
+var pug = require('gulp-pug');
 var gulpDebug = require('gulp-debug');
 var path = require('path');
 var del = require('del');
@@ -10,11 +11,10 @@ var stylus = require('gulp-stylus');
 
 var config = {
     tempDirectory: '.temp',
-    scriptsDirectory: '.dist',
     serverScriptsDirectory: '.dist',
-    serverViewsDirectory: '.dist/views-out',
-    clientScriptsDirectory: '.www/scripts',
-    clientStylesDirectory: '.www/styles'
+    serverViewsDirectory: '.dist/views',
+    publicScriptsDirectory: '.www/scripts',
+    publicStylesDirectory: '.www/styles'
 };
 
 function copy(files, destination) {
@@ -43,7 +43,7 @@ gulp.task('copy-scripts-client', function () {
 gulp.task('copy-scripts-server', function () {
     return copy(
         path.join(config.tempDirectory, './src/client/**/*.js'),
-        config.clientScriptsDirectory
+        config.publicScriptsDirectory
     );
 });
 
@@ -52,7 +52,27 @@ gulp.task('copy-scripts', gulp.parallel('copy-scripts-server', 'copy-scripts-cli
 gulp.task('stylus', function () {
     return gulp.src('./styles/**/*.styl')
         .pipe(stylus())
-        .pipe(gulp.dest(config.clientStylesDirectory));
+        .pipe(gulp.dest(config.publicStylesDirectory));
 });
 
-gulp.task('develop', gulp.series('clean', gulp.parallel('typescript', 'stylus'), 'copy-scripts'));
+gulp.task('pug', function () {
+    return gulp.src('./views/**/*.pug')
+        .pipe(pug())
+        .pipe(gulp.dest(config.serverViewsDirectory));
+});
+
+gulp.task('tidy-when-done', function(){
+   return del(config.tempDirectory);
+});
+
+gulp.task('develop',
+    gulp.series(
+        'clean',
+        gulp.parallel(
+            gulp.series('typescript', 'copy-scripts'),
+            'stylus',
+            'pug'
+        ),
+        'tidy-when-done'
+    )
+);
