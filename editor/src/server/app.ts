@@ -10,7 +10,7 @@ app.use(views(__dirname + '/views', {
     extension: 'pug'
 }));
 
-app.use(async function(ctx:Koa.Context, next:Function) {
+app.use(async(ctx:Koa.Context, next:Function) => {
     await ctx.render('user/profile');
 });
 

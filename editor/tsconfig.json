@@ -4,7 +4,7 @@
     "target": "es6",
     "sourceMap": true
   },
-  "files":[
+  "files": [
     "typings/tsd.d.ts",
     "src/server/app.ts",
     "src/client/app.ts"

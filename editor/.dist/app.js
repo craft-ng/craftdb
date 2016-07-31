@@ -16,9 +16,7 @@ app.use(views(__dirname + '/views', {
     map: { pug: 'pug' },
     extension: 'pug'
 }));
-app.use(function (ctx, next) {
-    return __awaiter(this, void 0, void 0, function* () {
-        yield ctx.render('user/profile');
-    });
-});
+app.use((ctx, next) => __awaiter(this, void 0, void 0, function* () {
+    yield ctx.render('user/profile');
+}));
 app.listen(3010);
