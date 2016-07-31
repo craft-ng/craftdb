@@ -1,8 +1,8 @@
 "use strict";
-// import * as Koa from 'koa';
 var Koa = require("koa");
-// import Koa = require("koa");
+var KoaRouter = require('koa-router');
 var app = new Koa();
+var router = new KoaRouter();
 app.use(function (ctx, next) {
     ctx.body = 'Hello';
 });

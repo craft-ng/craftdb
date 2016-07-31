@@ -61,11 +61,11 @@ gulp.task('pug', function () {
         .pipe(gulp.dest(config.serverViewsDirectory));
 });
 
-gulp.task('tidy-when-done', function(){
-   return del(config.tempDirectory);
+gulp.task('tidy-when-done', function () {
+    return del(config.tempDirectory);
 });
 
-gulp.task('develop',
+gulp.task('build',
     gulp.series(
         'clean',
         gulp.parallel(
@@ -76,3 +76,12 @@ gulp.task('develop',
         'tidy-when-done'
     )
 );
+
+gulp.task('watch', function () {
+    gulp.watch('./typings/**/*.ts', gulp.series('build'));
+    gulp.watch('./src/**/*.ts', gulp.series('build'));
+    gulp.watch('./styles/**/*.styl', gulp.series('build'));
+    gulp.watch('./views/**/*.pug', gulp.series('build'));
+});
+
+gulp.task('develop', gulp.series('build', 'watch'));

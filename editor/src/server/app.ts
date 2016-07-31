@@ -1,8 +1,8 @@
-// import * as Koa from 'koa';
 import Koa = require("koa");
+const KoaRouter = require('koa-router');
 
-// import Koa = require("koa");
 const app:Koa = new Koa();
+const router = new KoaRouter();
 
 app.use((ctx:Koa.Context, next:Function)=> {
     ctx.body = 'Hello';

@@ -4,7 +4,8 @@
   "description": "Graph editor for the craftdb project",
   "main": "dist/app.js",
   "dependencies": {
-    "koa": "^2.0.0"
+    "koa": "^2.0.0",
+    "koa-router": "^7.0.1"
   },
   "devDependencies": {
     "del": "^2.2.1",
@@ -14,7 +15,8 @@
     "gulp-pug": "^3.0.3",
     "gulp-stylus": "^2.5.0",
     "gulp-typescript": "^2.13.6",
-    "pug": "^2.0.0-beta4"
+    "pug": "^2.0.0-beta4",
+    "typescript": "^2.1.0-dev.20160731"
   },
   "scripts": {
     "test": "test"
