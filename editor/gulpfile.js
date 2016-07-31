@@ -57,7 +57,7 @@ gulp.task('stylus', function () {
 
 gulp.task('pug', function () {
     return gulp.src('./views/**/*.pug')
-        .pipe(pug())
+        //.pipe(pug())
         .pipe(gulp.dest(config.serverViewsDirectory));
 });
 
