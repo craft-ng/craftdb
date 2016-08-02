@@ -3,7 +3,8 @@ var pug = require('gulp-pug');
 var gulpDebug = require('gulp-debug');
 var path = require('path');
 var del = require('del');
-var es = require('event-stream');
+var nodemon = require('gulp-nodemon');
+
 var ts = require('gulp-typescript');
 var tsProject = ts.createProject('tsconfig.json');
 
@@ -57,7 +58,7 @@ gulp.task('stylus', function () {
 
 gulp.task('pug', function () {
     return gulp.src('./views/**/*.pug')
-        //.pipe(pug())
+    //.pipe(pug())
         .pipe(gulp.dest(config.serverViewsDirectory));
 });
 
@@ -84,4 +85,18 @@ gulp.task('watch', function () {
     gulp.watch('./views/**/*.pug', gulp.series('build'));
 });
 
-gulp.task('develop', gulp.series('build', 'watch'));
+gulp.task('serve-with-reload', function () {
+    nodemon({
+        script: '.dist/app.js',
+        ext: 'js ts',
+        watch: '.dist'
+        // tasks: ['build']
+    });
+});
+
+gulp.task('develop',
+    gulp.series(
+        'build',
+        gulp.parallel('watch', 'serve-with-reload')
+    )
+);

@@ -9,7 +9,7 @@ router
     .get('/', async(ctx:Koa.Context, next:Function)=> {
         await ctx.render('user/profile');
     })
-    .get('/users', (ctx:Koa.Context, next:Function)=> {
+    .get('/users', async(ctx:Koa.Context, next:Function)=> {
         ctx.body = 'User list to show up here';
     });
 
