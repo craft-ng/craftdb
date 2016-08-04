@@ -4,6 +4,7 @@ var gulpDebug = require('gulp-debug');
 var path = require('path');
 var del = require('del');
 var nodemon = require('gulp-nodemon');
+var server = require('gulp-develop-server');
 
 var ts = require('gulp-typescript');
 var tsProject = ts.createProject('tsconfig.json');
@@ -79,24 +80,47 @@ gulp.task('build',
 );
 
 gulp.task('watch', function () {
-    gulp.watch('./typings/**/*.ts', gulp.series('build'));
-    gulp.watch('./src/**/*.ts', gulp.series('build'));
+    gulp.watch('./typings/**/*.ts', gulp.series('build', 'serve-restart'));
+    gulp.watch('./src/**/*.ts', gulp.series('build', 'serve-restart'));
     gulp.watch('./styles/**/*.styl', gulp.series('build'));
     gulp.watch('./views/**/*.pug', gulp.series('build'));
 });
 
-gulp.task('serve-with-reload', function () {
-    nodemon({
-        script: '.dist/app.js',
-        ext: 'js ts',
-        watch: '.dist'
-        // tasks: ['build']
+gulp.task('serve', function () {
+    return server.listen({
+        path: '.dist/app.js',
+        delay: 2500
     });
 });
+
+gulp.task('serve-restart', function (done) {
+    server.restart(function (error) {
+        if (!error) done();
+    });
+});
+
+// gulp.task('serve-watch', function () {
+//     gulp.watch('./typings/**/*.ts', gulp.series('serve-restart'));
+//     gulp.watch('./src/**/*.ts', gulp.series('serve-restart'));
+// });
+
+// gulp.task('serve-with-reload', gulp.parallel('serve', 'serve-watch'));
+
+// gulp.task('serve-with-reload', function () {
+//     // nodemon({
+//     //     script: '.dist/app.js',
+//     //     ext: 'js ts',
+//     //     watch: '.dist/**/*.*'
+//     //     // tasks: ['build']
+//     // });
+// });
+
+// gulp.task('serve-with-reload-test', gulp.parallel('serve', 'watch'));
 
 gulp.task('develop',
     gulp.series(
         'build',
-        gulp.parallel('watch', 'serve-with-reload')
+        gulp.parallel('watch', 'serve')
+        // gulp.parallel('watch', 'serve-with-reload')
     )
 );
