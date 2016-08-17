@@ -10,8 +10,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 const Koa = require("koa");
 const KoaRouter = require('koa-router');
 const views = require('koa-views');
+//const serveStatic = require('koa-static-server');
+const serveStatic = require('koa-static');
 const app = new Koa();
 const router = new KoaRouter();
+// app.use(serveStatic({rootDir: '.www'}))
+app.use(serveStatic('.www'));
 router
     .get('/', (ctx, next) => __awaiter(this, void 0, void 0, function* () {
     yield ctx.render('user/profile');

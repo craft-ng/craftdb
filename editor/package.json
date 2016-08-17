@@ -6,9 +6,12 @@
   "dependencies": {
     "koa": "^2.0.0",
     "koa-router": "^7.0.1",
+    "koa-static": "^3.0.0",
+    "koa-static-server": "^0.1.8",
     "koa-views": "^5.0.2"
   },
   "devDependencies": {
+    "browser-sync": "^2.14.0",
     "del": "^2.2.1",
     "event-stream": "^3.3.4",
     "gulp": "github:gulpjs/gulp#4.0",

@@ -5,6 +5,7 @@ var path = require('path');
 var del = require('del');
 var nodemon = require('gulp-nodemon');
 var server = require('gulp-develop-server');
+var browserSync = require('browser-sync').create();
 
 var ts = require('gulp-typescript');
 var tsProject = ts.createProject('tsconfig.json');
@@ -54,7 +55,8 @@ gulp.task('copy-scripts', gulp.parallel('copy-scripts-server', 'copy-scripts-cli
 gulp.task('stylus', function () {
     return gulp.src('./styles/**/*.styl')
         .pipe(stylus())
-        .pipe(gulp.dest(config.publicStylesDirectory));
+        .pipe(gulp.dest(config.publicStylesDirectory))
+        .pipe(browserSync.stream());
 });
 
 gulp.task('pug', function () {
@@ -87,9 +89,13 @@ gulp.task('watch', function () {
 });
 
 gulp.task('serve', function () {
+
+    browserSync.init({
+        proxy: 'localhost:3010'
+    });
+
     return server.listen({
-        path: '.dist/app.js',
-        delay: 2500
+        path: '.dist/app.js'
     });
 });
 
