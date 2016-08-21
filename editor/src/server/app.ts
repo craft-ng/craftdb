@@ -1,13 +1,11 @@
 import Koa = require("koa");
 const KoaRouter = require('koa-router');
 const views = require('koa-views');
-//const serveStatic = require('koa-static-server');
 const serveStatic = require('koa-static');
 
 const app: Koa = new Koa();
 const router = new KoaRouter();
 
-// app.use(serveStatic({rootDir: '.www'}))
 app.use(serveStatic('.www'));
 
 router
