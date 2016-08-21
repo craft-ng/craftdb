@@ -1,4 +1,4 @@
-import Koa = require("koa");
+import Koa = require('koa');
 const KoaRouter = require('koa-router');
 const views = require('koa-views');
 const serveStatic = require('koa-static');
