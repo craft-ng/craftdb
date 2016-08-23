@@ -4,10 +4,9 @@
     "target": "es6",
     "sourceMap": true
   },
-  "files": [
+  "filesGlob": [
     "typings/tsd.d.ts",
-    "src/server/app.ts",
-    "src/client/app.ts"
+    "src/**/*.ts"
   ],
   "exclude": [
     "node_modules"
