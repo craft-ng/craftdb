@@ -6,10 +6,16 @@
   "bundle": "typings/tsd.d.ts",
   "installed": {
     "koa/koa.d.ts": {
-      "commit": "c6c068935a58aa58087a309740bcf933600140b8"
+      "commit": "55c3e254e151847b8d37ca09b1a566ad4a48a66a"
     },
     "node/node.d.ts": {
-      "commit": "c6c068935a58aa58087a309740bcf933600140b8"
+      "commit": "55c3e254e151847b8d37ca09b1a566ad4a48a66a"
+    },
+    "koa-mount/koa-mount.d.ts": {
+      "commit": "55c3e254e151847b8d37ca09b1a566ad4a48a66a"
+    },
+    "cookies/cookies.d.ts": {
+      "commit": "55c3e254e151847b8d37ca09b1a566ad4a48a66a"
     }
   }
 }

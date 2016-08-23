@@ -257,8 +257,8 @@ declare namespace NodeJS {
         readable: boolean;
         read(size?: number): string | Buffer;
         setEncoding(encoding: string): void;
-        pause(): void;
-        resume(): void;
+        pause(): ReadableStream;
+        resume(): ReadableStream;
         pipe<T extends WritableStream>(destination: T, options?: { end?: boolean; }): T;
         unpipe<T extends WritableStream>(destination?: T): void;
         unshift(chunk: string): void;
@@ -276,7 +276,10 @@ declare namespace NodeJS {
         end(str: string, encoding?: string, cb?: Function): void;
     }
 
-    export interface ReadWriteStream extends ReadableStream, WritableStream { }
+    export interface ReadWriteStream extends ReadableStream, WritableStream {
+      pause(): ReadWriteStream;
+      resume(): ReadWriteStream;
+    }
 
     export interface Events extends EventEmitter { }
 
@@ -301,6 +304,17 @@ declare namespace NodeJS {
         heapUsed: number;
     }
 
+    export interface ProcessVersions {
+        http_parser: string;
+        node: string;
+        v8: string;
+        ares: string;
+        uv: string;
+        zlib: string;
+        modules: string;
+        openssl: string;
+    }
+
     export interface Process extends EventEmitter {
         stdout: WritableStream;
         stderr: WritableStream;
@@ -313,6 +327,7 @@ declare namespace NodeJS {
         cwd(): string;
         env: any;
         exit(code?: number): void;
+        exitCode: number;
         getgid(): number;
         setgid(id: number): void;
         setgid(id: string): void;
@@ -320,16 +335,7 @@ declare namespace NodeJS {
         setuid(id: number): void;
         setuid(id: string): void;
         version: string;
-        versions: {
-            http_parser: string;
-            node: string;
-            v8: string;
-            ares: string;
-            uv: string;
-            zlib: string;
-            modules: string;
-            openssl: string;
-        };
+        versions: ProcessVersions;
         config: {
             target_defaults: {
                 cflags: any[];
@@ -479,6 +485,9 @@ interface NodeBuffer extends Uint8Array {
     readFloatBE(offset: number, noAssert?: boolean): number;
     readDoubleLE(offset: number, noAssert?: boolean): number;
     readDoubleBE(offset: number, noAssert?: boolean): number;
+    swap16(): Buffer;
+    swap32(): Buffer;
+    swap64(): Buffer;
     writeUInt8(value: number, offset: number, noAssert?: boolean): number;
     writeUInt16LE(value: number, offset: number, noAssert?: boolean): number;
     writeUInt16BE(value: number, offset: number, noAssert?: boolean): number;
@@ -605,6 +614,7 @@ declare module "http" {
         removeHeader(name: string): void;
         write(chunk: any, encoding?: string): any;
         addTrailers(headers: any): void;
+        finished: boolean;
 
         // Extended base methods
         end(): void;
@@ -663,6 +673,7 @@ declare module "http" {
          */
         statusMessage?: string;
         socket: net.Socket;
+        destroy(error?: Error): void;
     }
     /**
      * @deprecated Use IncomingMessage
@@ -899,7 +910,7 @@ declare module "https" {
         requestCert?: boolean;
         rejectUnauthorized?: boolean;
         NPNProtocols?: any;
-        SNICallback?: (servername: string) => any;
+        SNICallback?: (servername: string, cb:(err:Error,ctx:tls.SecureContext)=>any) => any;
     }
 
     export interface RequestOptions extends http.RequestOptions {
@@ -916,6 +927,14 @@ declare module "https" {
     export interface Agent extends http.Agent { }
 
     export interface AgentOptions extends http.AgentOptions {
+        pfx?: any;
+        key?: any;
+        passphrase?: string;
+        cert?: any;
+        ca?: any;
+        ciphers?: string;
+        rejectUnauthorized?: boolean;
+        secureProtocol?: string;
         maxCachedSessions?: number;
     }
 
@@ -1269,8 +1288,8 @@ declare module "net" {
         setEncoding(encoding?: string): void;
         write(data: any, encoding?: string, callback?: Function): void;
         destroy(): void;
-        pause(): void;
-        resume(): void;
+        pause(): Socket;
+        resume(): Socket;
         setTimeout(timeout: number, callback?: Function): void;
         setNoDelay(noDelay?: boolean): void;
         setKeepAlive(enable?: boolean, initialDelay?: number): void;
@@ -1355,8 +1374,9 @@ declare module "dgram" {
     export function createSocket(type: string, callback?: (msg: Buffer, rinfo: RemoteInfo) => void): Socket;
 
     interface Socket extends events.EventEmitter {
+        send(buf: Buffer, port: number, address: string, callback?: (error: Error, bytes: number) => void): void;
         send(buf: Buffer, offset: number, length: number, port: number, address: string, callback?: (error: Error, bytes: number) => void): void;
-        bind(port: number, address?: string, callback?: () => void): void;
+        bind(port?: number, address?: string, callback?: () => void): void;
         close(): void;
         address(): AddressInfo;
         setBroadcast(flag: boolean): void;
@@ -1406,6 +1426,7 @@ declare module "fs" {
     export interface WriteStream extends stream.Writable {
         close(): void;
         bytesWritten: number;
+        path: string | Buffer;
     }
 
     /**
@@ -1983,7 +2004,7 @@ declare module "tls" {
         requestCert?: boolean;
         rejectUnauthorized?: boolean;
         NPNProtocols?: any;  //array or Buffer;
-        SNICallback?: (servername: string) => any;
+        SNICallback?: (servername: string, cb:(err:Error,ctx:SecureContext)=>any) => any;
     }
 
     export interface ConnectionOptions {
@@ -2150,6 +2171,9 @@ declare module "crypto" {
     }
     export function publicEncrypt(public_key: string | RsaPublicKey, buffer: Buffer): Buffer
     export function privateDecrypt(private_key: string | RsaPrivateKey, buffer: Buffer): Buffer
+    export function getCiphers(): string[];
+    export function getCurves(): string[];
+    export function getHashes(): string[];
 }
 
 declare module "stream" {
@@ -2172,8 +2196,8 @@ declare module "stream" {
         _read(size: number): void;
         read(size?: number): any;
         setEncoding(encoding: string): void;
-        pause(): void;
-        resume(): void;
+        pause(): Readable;
+        resume(): Readable;
         pipe<T extends NodeJS.WritableStream>(destination: T, options?: { end?: boolean; }): T;
         unpipe<T extends NodeJS.WritableStream>(destination?: T): void;
         unshift(chunk: any): void;
@@ -2208,6 +2232,10 @@ declare module "stream" {
 
     // Note: Duplex extends both Readable and Writable.
     export class Duplex extends Readable implements NodeJS.ReadWriteStream {
+        // Readable
+        pause(): Duplex;
+        resume(): Duplex;
+        // Writeable
         writable: boolean;
         constructor(opts?: DuplexOptions);
         _write(chunk: any, encoding: string, callback: Function): void;
@@ -2232,8 +2260,8 @@ declare module "stream" {
         _flush(callback: Function): void;
         read(size?: number): any;
         setEncoding(encoding: string): void;
-        pause(): void;
-        resume(): void;
+        pause(): Transform;
+        resume(): Transform;
         pipe<T extends NodeJS.WritableStream>(destination: T, options?: { end?: boolean; }): T;
         unpipe<T extends NodeJS.WritableStream>(destination?: T): void;
         unshift(chunk: any): void;

@@ -38,14 +38,14 @@ gulp.task('typescript', function () {
 
 gulp.task('copy-scripts-client', function () {
     return copy(
-        path.join(config.tempDirectory, './src/server/**/*.js'),
+        path.join(config.tempDirectory, './server/**/*.js'),
         config.serverScriptsDirectory
     );
 });
 
 gulp.task('copy-scripts-server', function () {
     return copy(
-        path.join(config.tempDirectory, './src/client/**/*.js'),
+        path.join(config.tempDirectory, './client/**/*.js'),
         config.publicScriptsDirectory
     );
 });

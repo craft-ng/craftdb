@@ -7,25 +7,30 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments)).next());
     });
 };
-const Koa = require("koa");
+const Koa = require('koa');
+const mount = require('koa-mount');
+const user_1 = require('./admin/controllers/user');
 const KoaRouter = require('koa-router');
 const views = require('koa-views');
-//const serveStatic = require('koa-static-server');
 const serveStatic = require('koa-static');
 const app = new Koa();
 const router = new KoaRouter();
-// app.use(serveStatic({rootDir: '.www'}))
 app.use(serveStatic('.www'));
 router
     .get('/', (ctx, next) => __awaiter(this, void 0, void 0, function* () {
+    // await next();
     yield ctx.render('user/profile');
 }))
-    .get('/users', (ctx, next) => __awaiter(this, void 0, void 0, function* () {
-    ctx.body = 'User list to show up here';
+    .get('/about', (ctx, next) => __awaiter(this, void 0, void 0, function* () {
+    // await next();
+    ctx.body = 'About info comes here...';
 }));
 app.use(views(__dirname + '/views', {
     map: { pug: 'pug' },
     extension: 'pug'
 }));
-app.use(router.routes());
+app.use(router.middleware());
+const subApp = new Koa();
+subApp.use(new user_1.UserController().getRouter().middleware());
+app.use(mount('/user', subApp));
 app.listen(3010);
