@@ -52,6 +52,13 @@ gulp.task('copy-scripts-server', function () {
 
 gulp.task('copy-scripts', gulp.parallel('copy-scripts-server', 'copy-scripts-client'));
 
+gulp.task('copy-views-server', function () {
+    return copy(
+        path.join('./src', './server/**/*.pug'),
+        config.serverScriptsDirectory
+    );
+});
+
 gulp.task('stylus', function () {
     return gulp.src('./styles/**/*.styl')
         .pipe(stylus())
@@ -73,7 +80,7 @@ gulp.task('build',
     gulp.series(
         'clean',
         gulp.parallel(
-            gulp.series('typescript', 'copy-scripts'),
+            gulp.series('typescript', 'copy-scripts', 'copy-views-server'),
             'stylus',
             'pug'
         ),
