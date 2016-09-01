@@ -102,7 +102,7 @@ gulp.task('serve', function () {
     });
 
     return server.listen({
-        path: '.dist/app.js'
+        path: '.dist/app/app.js'
     });
 });
 

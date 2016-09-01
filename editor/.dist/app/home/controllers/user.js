@@ -9,16 +9,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 const KoaRouter = require('koa-router');
 class UserController {
-    //registerRoutes(router: KoaRouter)
     getRouter() {
         const router = new KoaRouter();
         return router
             .get('/', (ctx, next) => __awaiter(this, void 0, void 0, function* () {
-            ctx.body = 'User list';
+            ctx.body = 'Home User list';
         }))
-            .get('/:name', (ctx, next) => __awaiter(this, void 0, void 0, function* () {
-            ctx.body = `User name is ${ctx.params.name}`;
+            .get('/view', (ctx, next) => __awaiter(this, void 0, void 0, function* () {
+            yield ctx.render('index');
+        }))
+            .get('/:name/show', (ctx, next) => __awaiter(this, void 0, void 0, function* () {
+            ctx.body = `Home User name is ${ctx.params.name}`;
         }));
     }
 }
-exports.UserController = UserController;
+module.exports = UserController;
