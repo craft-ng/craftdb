@@ -4,6 +4,8 @@
   "description": "Graph editor for the craftdb project",
   "main": "dist/app.js",
   "dependencies": {
+    "extend": "^3.0.0",
+    "glob": "^7.0.6",
     "koa": "^2.0.0",
     "koa-mount": "^2.0.0",
     "koa-router": "^7.0.1",
