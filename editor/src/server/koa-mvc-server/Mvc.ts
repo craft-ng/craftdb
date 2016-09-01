@@ -22,8 +22,8 @@ interface FoundController {
 }
 
 export interface MvcOptions {
-    controllerConvention: string;
-    viewConvention: string;
+    controllerConvention?: string;
+    viewConvention?: string;
 }
 
 export class Mvc {
@@ -36,7 +36,7 @@ export class Mvc {
         options = extend(<MvcOptions>{
             controllerConvention: 'controllers/*.js',
             viewConvention: 'views'
-        });
+        }, options);
 
         for (var areaPath of areas) {
             this.registeredAreas.push(<RegisteredArea>{

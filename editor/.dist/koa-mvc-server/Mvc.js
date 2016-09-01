@@ -12,7 +12,7 @@ class Mvc {
         options = extend({
             controllerConvention: 'controllers/*.js',
             viewConvention: 'views'
-        });
+        }, options);
         for (var areaPath of areas) {
             this.registeredAreas.push({
                 applicationRootPath: rootPath,

@@ -62,7 +62,9 @@ app.use(serveStatic('.www'));
 
 
 var mvc = new Mvc();
-mvc.registerAreas(__dirname, ['/admin', '/home'], 'controllers/*.js');
+mvc.registerAreas(__dirname, ['/admin', '/home'], {
+    viewConvention: 'views/'
+});
 app.use(mvc.routes());
 
 // app.use(mvcArea('/root'));
