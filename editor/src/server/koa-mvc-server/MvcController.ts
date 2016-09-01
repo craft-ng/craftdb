@@ -1,4 +1,4 @@
 export interface MvcController{
 
-    public function getRouter();
+    function getRouter();
 }

@@ -3,14 +3,16 @@ import {MvcController} from "./MvcController";
 import {mvcArea} from "./MvcArea";
 import glob = require("glob");
 import path = require("path");
+import extend = require("extend");
 const KoaRouter = require('koa-router');
 
 import {KoaMiddleware} from "./KoaMiddleware";
+import extend = require("extend");
 
 interface RegisteredArea {
     applicationRootPath: string;
     areaPath: string;
-    controllerConvention: string;
+    options: MvcOptions;
     //absolutePath: string;
 }
 
@@ -19,18 +21,28 @@ interface FoundController {
     area: RegisteredArea;
 }
 
+export interface MvcOptions {
+    controllerConvention: string;
+    viewConvention: string;
+}
+
 export class Mvc {
 
     private registeredAreas: Array<RegisteredArea> = [];
 
     public function
 
-    registerAreas(rootPath: string, areas: Array<string>, controllerConvention: string) {
+    registerAreas(rootPath: string, areas: Array<string>, options: MvcOptions) {
+        options = extend(<MvcOptions>{
+            controllerConvention: 'controllers/*.js',
+            viewConvention: 'views'
+        });
+
         for (var areaPath of areas) {
             this.registeredAreas.push(<RegisteredArea>{
                 applicationRootPath: rootPath,
                 areaPath: areaPath,
-                controllerConvention: controllerConvention
+                options: options
                 //absolutePath: path.join(rootPath, areaPath)
             });
         }
@@ -41,7 +53,9 @@ export class Mvc {
         var controllers: Array<FoundController> = [];
         for (var area of this.registeredAreas) {
             var controllerSearchPattern: string = path.join(
-                area.applicationRootPath, area.areaPath, area.controllerConvention
+                area.applicationRootPath,
+                area.areaPath,
+                area.options.controllerConvention
             );
 
             var files: Array<string> = glob.sync(controllerSearchPattern);
@@ -63,9 +77,15 @@ export class Mvc {
     routes(): KoaMiddleware {
         const router = new KoaRouter();
         for (var foundController of this.discoverControllers()) {
+            var viewSearchDirectory = path.join(
+                foundController.area.applicationRootPath,
+                foundController.area.areaPath,
+                foundController.area.options.viewConvention
+            );
+
             mvcArea(foundController.area.areaPath, {
                 parentRouter: router,
-                viewsDirectory: foundController.area.applicationRootPath,
+                viewsDirectory: viewSearchDirectory,
                 routes: foundController.controller.getRouter().routes()
             });
         }
