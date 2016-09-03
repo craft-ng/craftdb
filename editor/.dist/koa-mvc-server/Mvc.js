@@ -54,7 +54,7 @@ class Mvc {
         const router = new KoaRouter();
         for (var foundController of this.discoverControllers()) {
             this.createArea({
-                name: foundController.area.areaPath,
+                rootRoute: foundController.area.areaPath,
                 parentRouter: router,
                 viewMiddleware: foundController.area.options.views.middleware(foundController.area),
                 routes: foundController.controller.getRouter().routes()

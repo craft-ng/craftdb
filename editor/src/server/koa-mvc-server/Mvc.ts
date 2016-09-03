@@ -109,7 +109,7 @@ export class Mvc {
         for (var foundController of this.discoverControllers()) {
 
             this.createArea({
-                name: foundController.area.areaPath,
+                rootRoute: foundController.area.areaPath,
                 parentRouter: router,
                 viewMiddleware: foundController.area.options.views.middleware(
                     foundController.area

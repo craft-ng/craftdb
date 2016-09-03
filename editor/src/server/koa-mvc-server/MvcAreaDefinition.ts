@@ -1,9 +1,8 @@
 import {KoaMiddleware} from "./KoaMiddleware";
 
 export interface MvcAreaDefinition {
-    name: string;
+    rootRoute: string; // "name" of the area
     parentRouter;
     routes;
     viewMiddleware: KoaMiddleware;
-    rootRoute?: string;
 }
