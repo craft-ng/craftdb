@@ -1,6 +1,7 @@
 var gulp = require('gulp');
 var pug = require('gulp-pug');
 var gulpDebug = require('gulp-debug');
+var rename = require('gulp-rename');
 var path = require('path');
 var del = require('del');
 var nodemon = require('gulp-nodemon');
@@ -17,11 +18,16 @@ var config = {
     serverScriptsDirectory: '.dist',
     serverViewsDirectory: '.dist/views',
     publicScriptsDirectory: '.www/scripts',
-    publicStylesDirectory: '.www/styles'
+    publicStylesDirectory: '.www/styles',
+    serverScriptsExtension: '.js',
+    publicScriptsExtension: '.js'
 };
 
-function copy(files, destination) {
+function copy(files, destination, renameOptions) {
+    var doNotRename = {};
+
     return gulp.src(files)
+        .pipe(rename(renameOptions || doNotRename))
         .pipe(gulp.dest(destination));
 }
 
@@ -38,15 +44,17 @@ gulp.task('typescript', function () {
 
 gulp.task('copy-scripts-client', function () {
     return copy(
-        path.join(config.tempDirectory, './server/**/*.js'),
-        config.serverScriptsDirectory
+        path.join(config.tempDirectory, './client/**/*.js'),
+        config.publicScriptsDirectory,
+        {extname: config.publicScriptsExtension}
     );
 });
 
 gulp.task('copy-scripts-server', function () {
     return copy(
-        path.join(config.tempDirectory, './client/**/*.js'),
-        config.publicScriptsDirectory
+        path.join(config.tempDirectory, './server/**/*.js'),
+        config.serverScriptsDirectory,
+        {extname: config.serverScriptsExtension}
     );
 });
 
@@ -102,7 +110,7 @@ gulp.task('serve', function () {
     });
 
     return server.listen({
-        path: '.dist/app/app.js'
+        path: '.dist/app/app' + config.serverScriptsExtension
     });
 });
 
@@ -112,28 +120,9 @@ gulp.task('serve-restart', function (done) {
     });
 });
 
-// gulp.task('serve-watch', function () {
-//     gulp.watch('./typings/**/*.ts', gulp.series('serve-restart'));
-//     gulp.watch('./src/**/*.ts', gulp.series('serve-restart'));
-// });
-
-// gulp.task('serve-with-reload', gulp.parallel('serve', 'serve-watch'));
-
-// gulp.task('serve-with-reload', function () {
-//     // nodemon({
-//     //     script: '.dist/app.js',
-//     //     ext: 'js ts',
-//     //     watch: '.dist/**/*.*'
-//     //     // tasks: ['build']
-//     // });
-// });
-
-// gulp.task('serve-with-reload-test', gulp.parallel('serve', 'watch'));
-
 gulp.task('develop',
     gulp.series(
         'build',
         gulp.parallel('watch', 'serve')
-        // gulp.parallel('watch', 'serve-with-reload')
     )
 );

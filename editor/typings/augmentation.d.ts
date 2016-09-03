@@ -6,3 +6,4 @@ declare module "koa" {
         render(viewName: string): void;
     }
 }
+
