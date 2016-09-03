@@ -47,16 +47,14 @@ class Mvc {
         }
         return controllers;
     }
-    createArea(name, options) {
-        options = extend({
-            rootRoute: name,
-        }, options);
-        options.parentRouter.use(options.rootRoute, options.viewMiddleware, options.routes);
+    createArea(definition) {
+        definition.parentRouter.use(definition.rootRoute, definition.viewMiddleware, definition.routes);
     }
     routes() {
         const router = new KoaRouter();
         for (var foundController of this.discoverControllers()) {
-            this.createArea(foundController.area.areaPath, {
+            this.createArea({
+                name: foundController.area.areaPath,
                 parentRouter: router,
                 viewMiddleware: foundController.area.options.views.middleware(foundController.area),
                 routes: foundController.controller.getRouter().routes()

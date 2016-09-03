@@ -6,14 +6,12 @@ const KoaRouter = require('koa-router');
 const views = require('koa-views');
 
 import {KoaMiddleware} from "./KoaMiddleware";
-import extend = require("extend");
-import {MvcAreaOptions} from "./MvcAreaOptions";
+import {MvcAreaDefinition} from "./MvcAreaDefinition";
 
 interface RegisteredArea {
     applicationRootPath: string;
     areaPath: string;
     options: MvcOptions;
-    //absolutePath: string;
 }
 
 interface FoundController {
@@ -24,7 +22,6 @@ interface FoundController {
 export interface MvcController {
     getRouter(): any;
 }
-
 
 export interface MvcOptions {
     controllers?: {
@@ -98,18 +95,12 @@ export class Mvc {
         return controllers;
     }
 
-    private createArea(name: string, options: MvcAreaOptions) {
+    private createArea(definition: MvcAreaDefinition) {
 
-        options = extend(<MvcAreaOptions>{
-            rootRoute: name,
-            // viewsDirectory: path.join(name, 'views'),
-            // viewMiddleware:
-        }, options);
-
-        options.parentRouter.use(
-            options.rootRoute,
-            options.viewMiddleware,
-            options.routes
+        definition.parentRouter.use(
+            definition.rootRoute,
+            definition.viewMiddleware,
+            definition.routes
         );
     }
 
@@ -117,7 +108,8 @@ export class Mvc {
         const router = new KoaRouter();
         for (var foundController of this.discoverControllers()) {
 
-            this.createArea(foundController.area.areaPath, {
+            this.createArea({
+                name: foundController.area.areaPath,
                 parentRouter: router,
                 viewMiddleware: foundController.area.options.views.middleware(
                     foundController.area
