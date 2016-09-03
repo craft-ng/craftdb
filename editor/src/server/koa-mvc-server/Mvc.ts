@@ -1,13 +1,13 @@
 import Koa = require("koa");
-import {MvcController} from "./MvcController";
-import {mvcArea} from "./MvcArea";
 import glob = require("glob");
 import path = require("path");
 import extend = require("extend");
 const KoaRouter = require('koa-router');
+const views = require('koa-views');
 
 import {KoaMiddleware} from "./KoaMiddleware";
 import extend = require("extend");
+import {MvcAreaOptions} from "./MvcAreaOptions";
 
 interface RegisteredArea {
     applicationRootPath: string;
@@ -21,21 +21,49 @@ interface FoundController {
     area: RegisteredArea;
 }
 
+export interface MvcController {
+    getRouter(): any;
+}
+
+
 export interface MvcOptions {
-    controllerConvention?: string;
-    viewConvention?: string;
+    controllers?: {
+        convention?: string;
+    };
+    views?: {
+        convention?: string;
+        extension?: string;
+        engine?: string;
+        middleware?: (area: RegisteredArea)=>KoaMiddleware;
+    };
+    middleware?: Array<(area: RegisteredArea)=>KoaMiddleware>;
 }
 
 export class Mvc {
 
     private registeredAreas: Array<RegisteredArea> = [];
 
-    public function
+    public registerAreas(rootPath: string, areas: Array<string>, options: MvcOptions) {
+        options = extend(true, <MvcOptions>{
+            controllers: {convention: 'controllers/*.js'},
+            views: {
+                convention: 'views',
+                engine: 'ejs',
+                extension: 'html',
+                middleware: area => {
 
-    registerAreas(rootPath: string, areas: Array<string>, options: MvcOptions) {
-        options = extend(<MvcOptions>{
-            controllerConvention: 'controllers/*.js',
-            viewConvention: 'views'
+                    var viewSearchDirectory = path.join(
+                        area.applicationRootPath,
+                        area.areaPath,
+                        area.options.views.convention
+                    );
+
+                    return views(viewSearchDirectory, {
+                        map: {[area.options.views.extension]: area.options.views.engine},
+                        extension: area.options.views.extension
+                    });
+                }
+            }
         }, options);
 
         for (var areaPath of areas) {
@@ -43,10 +71,8 @@ export class Mvc {
                 applicationRootPath: rootPath,
                 areaPath: areaPath,
                 options: options
-                //absolutePath: path.join(rootPath, areaPath)
             });
         }
-        // this.registeredAreas.push(...areas);
     }
 
     private discoverControllers(): Array<FoundController> {
@@ -55,7 +81,7 @@ export class Mvc {
             var controllerSearchPattern: string = path.join(
                 area.applicationRootPath,
                 area.areaPath,
-                area.options.controllerConvention
+                area.options.controllers.convention
             );
 
             var files: Array<string> = glob.sync(controllerSearchPattern);
@@ -72,20 +98,30 @@ export class Mvc {
         return controllers;
     }
 
-    public function
+    private createArea(name: string, options: MvcAreaOptions) {
 
-    routes(): KoaMiddleware {
+        options = extend(<MvcAreaOptions>{
+            rootRoute: name,
+            // viewsDirectory: path.join(name, 'views'),
+            // viewMiddleware:
+        }, options);
+
+        options.parentRouter.use(
+            options.rootRoute,
+            options.viewMiddleware,
+            options.routes
+        );
+    }
+
+    public routes(): KoaMiddleware {
         const router = new KoaRouter();
         for (var foundController of this.discoverControllers()) {
-            var viewSearchDirectory = path.join(
-                foundController.area.applicationRootPath,
-                foundController.area.areaPath,
-                foundController.area.options.viewConvention
-            );
 
-            mvcArea(foundController.area.areaPath, {
+            this.createArea(foundController.area.areaPath, {
                 parentRouter: router,
-                viewsDirectory: viewSearchDirectory,
+                viewMiddleware: foundController.area.options.views.middleware(
+                    foundController.area
+                ),
                 routes: foundController.controller.getRouter().routes()
             });
         }
