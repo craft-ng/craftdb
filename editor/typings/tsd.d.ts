@@ -6,4 +6,3 @@
 /// <reference path="extend/extend.d.ts" />
 /// <reference path="glob/glob.d.ts" />
 /// <reference path="minimatch/minimatch.d.ts" />
-/// <reference path="augmentation.d.ts" />
