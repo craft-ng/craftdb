@@ -29,10 +29,10 @@ var config = {
     publicScriptsExtension: '.js'
 };
 
-function copy(files, destination, renameOptions) {
+function copy(files, destination, base, renameOptions) {
     var doNotRename = {};
 
-    return gulp.src(files)
+    return gulp.src(files, {base: base})
         .pipe(rename(renameOptions || doNotRename))
         .pipe(gulp.dest(destination));
 }
@@ -40,10 +40,13 @@ function copy(files, destination, renameOptions) {
 function compileTypeScript(tsProject, mapDirectory) {
 
     return tsProject.src()
-        .pipe(sourcemaps.init({debug: true}))
+        .pipe(sourcemaps.init())
         .pipe(ts(tsProject))
         .js
-        .pipe(sourcemaps.write(mapDirectory))
+        .pipe(sourcemaps.write(mapDirectory, {
+            includeContent: false,
+            sourceRoot: '/.www/scripts'
+        }))
         .pipe(gulp.dest(config.tempDirectory));
 }
 
@@ -53,12 +56,30 @@ gulp.task('clean', function () {
 });
 
 gulp.task('typescript-client', function () {
-    return compileTypeScript(tsClientProject, '../.maps');
+    // return compileTypeScript(tsClientProject, '.');
+    return tsClientProject.src()
+        .pipe(sourcemaps.init())
+        .pipe(ts(tsClientProject))
+        .js
+        .pipe(sourcemaps.write('.', {
+            //includeContent: false,
+            sourceRoot: '/scripts' //without .www on purpose (.www is defined by static file server)
+        }))
+        .pipe(gulp.dest(config.tempDirectory));
 });
 
 gulp.task('typescript-server', function () {
-    return compileTypeScript(tsServerProject, '../.maps');
-});
+    // return compileTypeScript(tsServerProject, '../.dist/maps');
+    return tsServerProject.src()
+        .pipe(sourcemaps.init())
+        .pipe(ts(tsServerProject))
+        .js
+        .pipe(sourcemaps.write('.', {
+            //includeContent: false,
+            sourceRoot: '/src'
+        }))
+        .pipe(gulp.dest(config.tempDirectory));
+});v
 
 gulp.task('typescript', gulp.parallel(
     'typescript-client',
@@ -67,17 +88,17 @@ gulp.task('typescript', gulp.parallel(
 
 gulp.task('copy-scripts-client', function () {
     return copy(
-        path.join(config.tempDirectory, './client/**/*.js'),
+        path.join(config.tempDirectory, './client/**/*.{js,js.map}'),
         config.publicScriptsDirectory,
-        {extname: config.publicScriptsExtension}
+        config.tempDirectory
     );
 });
 
 gulp.task('copy-scripts-server', function () {
     return copy(
-        path.join(config.tempDirectory, './server/**/*.js'),
+        path.join(config.tempDirectory, './server/**/*.{js,js.map}'),
         config.serverScriptsDirectory,
-        {extname: config.serverScriptsExtension}
+        config.tempDirectory
     );
 });
 
@@ -86,7 +107,8 @@ gulp.task('copy-scripts', gulp.parallel('copy-scripts-server', 'copy-scripts-cli
 gulp.task('copy-views-server', function () {
     return copy(
         path.join('./src', './server/**/*.pug'),
-        config.serverScriptsDirectory
+        config.serverScriptsDirectory,
+        './src'
     );
 });
 
