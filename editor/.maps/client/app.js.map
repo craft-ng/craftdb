@@ -1,0 +1,1 @@
+{"version":3,"sources":["client/app.ts"],"names":[],"mappings":";;IAEA,IAAI,KAAC,EAAE,CAAC,CAAC,EAAE,CAAC","file":"client/app.js","sourcesContent":["import {A} from \"./a\";\n\nnew A().f();"],"sourceRoot":"/source/"}
