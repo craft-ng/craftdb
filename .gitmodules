@@ -1,0 +1,3 @@
+[submodule "editor/gulp-typescript"]
+	path = editor/gulp-typescript
+	url = https://github.com/pbalaga/gulp-typescript.git
