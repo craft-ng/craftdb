@@ -15,11 +15,13 @@ var tsCommonOptions = {}; //{typescript: require('typescript')};
 var tsServerProject = ts.createProject('tsconfig.json', tsCommonOptions);
 var tsClientProject = ts.createProject('tsconfig-client.json', tsCommonOptions);
 
+var sourcemaps = require('gulp-sourcemaps');
+
 var stylus = require('gulp-stylus');
 
 var config = {
     tempDirectory: '.temp',
-    serverScriptsDirectory: '.dist',
+    serverScriptsDirectory: '.dist/scripts',
     serverViewsDirectory: '.dist/views',
     publicScriptsDirectory: '.www/scripts',
     publicStylesDirectory: '.www/styles',
@@ -35,21 +37,27 @@ function copy(files, destination, renameOptions) {
         .pipe(gulp.dest(destination));
 }
 
+function compileTypeScript(tsProject, mapDirectory) {
+
+    return tsProject.src()
+        .pipe(sourcemaps.init({debug: true}))
+        .pipe(ts(tsProject))
+        .js
+        .pipe(sourcemaps.write(mapDirectory))
+        .pipe(gulp.dest(config.tempDirectory));
+}
+
 gulp.task('clean', function () {
     var directoriesStartingWithDot = './.**/';
     return del(directoriesStartingWithDot);
 });
 
 gulp.task('typescript-client', function () {
-    return tsClientProject.src()
-        .pipe(ts(tsClientProject))
-        .js.pipe(gulp.dest(config.tempDirectory));
+    return compileTypeScript(tsClientProject, '../.maps');
 });
 
 gulp.task('typescript-server', function () {
-    return tsServerProject.src()
-        .pipe(ts(tsServerProject))
-        .js.pipe(gulp.dest(config.tempDirectory));
+    return compileTypeScript(tsServerProject, '../.maps');
 });
 
 gulp.task('typescript', gulp.parallel(
@@ -128,7 +136,7 @@ gulp.task('serve', function () {
     });
 
     return server.listen({
-        path: '.dist/app/app' + config.serverScriptsExtension
+        path: '.dist/scripts/app/app' + config.serverScriptsExtension
     });
 });
 
