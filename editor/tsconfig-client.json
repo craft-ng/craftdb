@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "es6",
-    "sourceMap": true
+    "module": "amd",
+    "target": "es5",
+    "sourceMap": true,
+    "rootDir": "src"
   },
   "include": [
-    "typings/tsd.d.ts",
-    "src/server/**/*.ts"
+    "src/client/**/*.ts"
   ],
   "exclude": [
     "node_modules",
