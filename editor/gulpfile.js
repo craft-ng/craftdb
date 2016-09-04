@@ -118,6 +118,7 @@ gulp.task('watch', function () {
     gulp.watch('./src/**/*.ts', gulp.series('build', 'serve-restart'));
     gulp.watch('./styles/**/*.styl', gulp.series('build'));
     gulp.watch('./views/**/*.pug', gulp.series('build'));
+    gulp.watch('./src/server/**/*.pug', gulp.series('build'));
 });
 
 gulp.task('serve', function () {
