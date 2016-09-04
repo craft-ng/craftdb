@@ -25,7 +25,7 @@
     "gulp-stylus": "^2.5.0",
     "gulp-typescript": "^2.13.6",
     "pug": "^2.0.0-beta4",
-    "typescript": "^2.1.0-dev.20160731"
+    "typescript": "^2.1.0-dev.20160903"
   },
   "scripts": {
     "test": "test"

@@ -2,6 +2,7 @@ import Koa = require("koa");
 import {MvcController} from "../../../koa-mvc-server/Mvc";
 const KoaRouter = require('koa-router');
 
+
 class UserController implements MvcController {
 
     public getRouter() {

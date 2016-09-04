@@ -9,7 +9,10 @@ var server = require('gulp-develop-server');
 var browserSync = require('browser-sync').create();
 
 var ts = require('gulp-typescript');
-var tsProject = ts.createProject('tsconfig.json');
+var tsCommonOptions = {}; //{typescript: require('typescript')};
+
+var tsServerProject = ts.createProject('tsconfig.json', tsCommonOptions);
+var tsClientProject = ts.createProject('tsconfig-client.json', tsCommonOptions);
 
 var stylus = require('gulp-stylus');
 
@@ -36,11 +39,22 @@ gulp.task('clean', function () {
     return del(directoriesStartingWithDot);
 });
 
-gulp.task('typescript', function () {
-    return tsProject.src()
-        .pipe(ts(tsProject))
+gulp.task('typescript-client', function () {
+    return tsClientProject.src()
+        .pipe(ts(tsClientProject))
         .js.pipe(gulp.dest(config.tempDirectory));
 });
+
+gulp.task('typescript-server', function () {
+    return tsServerProject.src()
+        .pipe(ts(tsServerProject))
+        .js.pipe(gulp.dest(config.tempDirectory));
+});
+
+gulp.task('typescript', gulp.parallel(
+    'typescript-client',
+    'typescript-server'
+));
 
 gulp.task('copy-scripts-client', function () {
     return copy(
@@ -88,7 +102,9 @@ gulp.task('build',
     gulp.series(
         'clean',
         gulp.parallel(
-            gulp.series('typescript', 'copy-scripts', 'copy-views-server'),
+            gulp.series('typescript-client', 'copy-scripts-client'),
+            gulp.series('typescript-server', 'copy-scripts-server', 'copy-views-server'),
+            // gulp.series('typescript-server', 'copy-scripts', 'copy-views-server'),
             'stylus',
             'pug'
         ),
