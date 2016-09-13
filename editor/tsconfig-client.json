@@ -8,7 +8,9 @@
   },
   "include": [
     "src/client/**/*.ts",
-    "src/client/**/*.js"
+    "src/client/**/*.js",
+    "src/common/**/*.ts",
+    "src/common/**/*.js"
   ],
   "exclude": [
     "node_modules",

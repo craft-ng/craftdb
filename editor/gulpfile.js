@@ -21,6 +21,8 @@ var stylus = require('gulp-stylus');
 
 var config = {
     tempDirectory: '.temp',
+    tempServerScriptsDirectory: '.temp/server-scripts',
+    tempClientScriptsDirectory: '.temp/client-scripts',
     serverScriptsDirectory: '.dist/scripts',
     serverViewsDirectory: '.dist/views',
     publicScriptsDirectory: '.www/scripts',
@@ -65,7 +67,7 @@ gulp.task('typescript-client', function () {
             //includeContent: false,
             sourceRoot: '/scripts' //without .www on purpose (.www is defined by static file server)
         }))
-        .pipe(gulp.dest(config.tempDirectory));
+        .pipe(gulp.dest(config.tempClientScriptsDirectory));
 });
 
 gulp.task('typescript-server', function () {
@@ -78,8 +80,8 @@ gulp.task('typescript-server', function () {
             //includeContent: false,
             sourceRoot: '/src'
         }))
-        .pipe(gulp.dest(config.tempDirectory));
-});v
+        .pipe(gulp.dest(config.tempServerScriptsDirectory));
+});
 
 gulp.task('typescript', gulp.parallel(
     'typescript-client',
@@ -88,17 +90,17 @@ gulp.task('typescript', gulp.parallel(
 
 gulp.task('copy-scripts-client', function () {
     return copy(
-        path.join(config.tempDirectory, './client/**/*.{js,js.map}'),
+        path.join(config.tempClientScriptsDirectory, './{client,common}/**/*.{js,js.map}'),
         config.publicScriptsDirectory,
-        config.tempDirectory
+        config.tempClientScriptsDirectory
     );
 });
 
 gulp.task('copy-scripts-server', function () {
     return copy(
-        path.join(config.tempDirectory, './server/**/*.{js,js.map}'),
+        path.join(config.tempServerScriptsDirectory, './{server,common}/**/*.{js,js.map}'),
         config.serverScriptsDirectory,
-        config.tempDirectory
+        config.tempServerScriptsDirectory
     );
 });
 
