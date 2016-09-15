@@ -1,9 +1,12 @@
 span Home Nested view index
 
-script(src='/scripts/client/system.js')
+script(src='/scripts/common/system.js')
+script(src='/scripts/client/system.config.js')
 script.
+    SystemJS.import('jquery');
+    SystemJS.import('scripts/client/app');
+//
     SystemJS.config({
         defaultJSExtensions: true,
         baseURL: '/scripts/client'
     });
-    SystemJS.import('app');

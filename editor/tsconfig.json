@@ -8,6 +8,8 @@
   "include": [
     "typings/tsd.d.ts",
     "typings/augmentation-server.d.ts",
+    "src/*.ts",
+    "src/*.js",
     "src/server/**/*.ts",
     "src/server/**/*.js",
     "src/common/**/*.ts",

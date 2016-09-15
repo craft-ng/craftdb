@@ -90,7 +90,7 @@ gulp.task('typescript', gulp.parallel(
 
 gulp.task('copy-scripts-client', function () {
     return copy(
-        path.join(config.tempClientScriptsDirectory, './{client,common}/**/*.{js,js.map}'),
+        path.join(config.tempClientScriptsDirectory, './**/*.{js,js.map}'),
         config.publicScriptsDirectory,
         config.tempClientScriptsDirectory
     );
@@ -98,7 +98,7 @@ gulp.task('copy-scripts-client', function () {
 
 gulp.task('copy-scripts-server', function () {
     return copy(
-        path.join(config.tempServerScriptsDirectory, './{server,common}/**/*.{js,js.map}'),
+        path.join(config.tempServerScriptsDirectory, './**/*.{js,js.map}'),
         config.serverScriptsDirectory,
         config.tempServerScriptsDirectory
     );

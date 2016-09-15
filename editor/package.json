@@ -25,6 +25,7 @@
     "gulp-sourcemaps": "^1.6.0",
     "gulp-stylus": "^2.5.0",
     "gulp-typescript": "^2.13.6",
+    "jspm": "^0.16.45",
     "pug": "^2.0.0-beta4",
     "typescript": "^2.1.0-dev.20160903"
   },
@@ -39,5 +40,16 @@
     "editor"
   ],
   "author": "Pawel Balaga",
-  "license": "To be determined"
+  "license": "To be determined",
+  "jspm": {
+    "directories": {
+      "baseURL": ".www",
+      "packages": "jspm_packages"
+    },
+    "configFile": "src/config-client.js",
+    "dependencies": {
+      "jquery": "npm:jquery@^3.1.0"
+    },
+    "devDependencies": {}
+  }
 }

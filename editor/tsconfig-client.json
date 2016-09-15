@@ -7,6 +7,8 @@
     "allowJs": true
   },
   "include": [
+    "src/*.ts",
+    "src/*.js",
     "src/client/**/*.ts",
     "src/client/**/*.js",
     "src/common/**/*.ts",
