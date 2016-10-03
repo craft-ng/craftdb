@@ -53,7 +53,7 @@ function compileTypeScript(tsProject, mapDirectory) {
 }
 
 gulp.task('clean', function () {
-    var directoriesStartingWithDot = './.**/';
+    var directoriesStartingWithDot = './.**/!(jspm_packages)/**';
     return del(directoriesStartingWithDot);
 });
 

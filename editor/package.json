@@ -7,6 +7,8 @@
     "extend": "^3.0.0",
     "glob": "^7.0.6",
     "koa": "^2.0.0",
+    "koa-cache-control": "^1.0.0",
+    "koa-compress": "^2.0.0",
     "koa-mount": "^2.0.0",
     "koa-router": "^7.0.1",
     "koa-static": "^3.0.0",
@@ -26,7 +28,9 @@
     "gulp-stylus": "^2.5.0",
     "gulp-typescript": "^2.13.6",
     "jspm": "^0.16.45",
+    "koa-static-cache": "^3.1.7",
     "pug": "^2.0.0-beta4",
+    "systemjs-cachebuster": "^1.0.14",
     "typescript": "^2.1.0-dev.20160903"
   },
   "scripts": {
@@ -43,10 +47,9 @@
   "license": "To be determined",
   "jspm": {
     "directories": {
-      "baseURL": ".www",
-      "packages": "jspm_packages"
+      "baseURL": ".www"
     },
-    "configFile": "src/config-client.js",
+    "configFile": "src/client/system.config.js",
     "dependencies": {
       "jquery": "npm:jquery@^3.1.0"
     },
