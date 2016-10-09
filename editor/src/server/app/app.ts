@@ -2,10 +2,17 @@ import Koa = require('koa');
 import {Mvc} from "../koa-mvc-server/Mvc";
 import mount = require('koa-mount');
 import zlib = require('zlib');
+import {fileReload} from '../file-reload/file-reload';
+import path = require('path');
 const serveStatic = require('koa-static');
 const compress = require('koa-compress');
 
-const manifest = require('../../../webpack-assets.json');
+var manifest;
+
+fileReload(
+    path.resolve(__dirname, '../../../webpack-assets.json'),
+    content => manifest = JSON.parse(content)
+);
 
 var serveStaticOptions = {
     maxAge: 30,
@@ -17,11 +24,11 @@ const app: Koa = new Koa();
 app.use(compress({
     flush: zlib.Z_SYNC_FLUSH
 }));
-app.use((ctx:Koa.Context, next)=>{
+app.use((ctx: Koa.Context, next)=> {
     return next().then(() => {
         //ctx.set('Cache-Control', 'max-age=10');
     });
-   // ctx.set('Cache-Control', 'no-cache');
+    // ctx.set('Cache-Control', 'no-cache');
 });
 app.use(serveStatic('.www', serveStaticOptions));
 
@@ -35,12 +42,13 @@ mvc.registerAreas(__dirname, ['/admin', '/home'], {
         extension: 'pug',
         engine: 'pug',
         templateOptions: {
+            basedir: '.dist/scripts/server/app',
             meta: {
                 manifest: manifest,
             },
             render: {
-                script: bundle => manifest[bundle]['js'],
-                style: bundle => manifest[bundle]['css']
+                scriptSource: bundle => manifest[bundle]['js'],
+                styleSource: bundle => manifest[bundle]['css']
             }
         }
     }

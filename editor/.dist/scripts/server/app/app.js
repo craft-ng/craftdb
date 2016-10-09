@@ -3,9 +3,12 @@ const Koa = require('koa');
 const Mvc_1 = require("../koa-mvc-server/Mvc");
 const mount = require('koa-mount');
 const zlib = require('zlib');
+const file_reload_1 = require('../file-reload/file-reload');
+const path = require('path');
 const serveStatic = require('koa-static');
 const compress = require('koa-compress');
-const manifest = require('../../../webpack-assets.json');
+var manifest;
+file_reload_1.fileReload(path.resolve(__dirname, '../../../webpack-assets.json'), content => manifest = JSON.parse(content));
 var serveStaticOptions = {
     maxAge: 30,
     buffer: true
@@ -31,12 +34,14 @@ mvc.registerAreas(__dirname, ['/admin', '/home'], {
         extension: 'pug',
         engine: 'pug',
         templateOptions: {
+            basedir: '.dist/scripts/server/app',
             meta: {
                 manifest: manifest,
             },
             render: {
-                script: bundle => manifest[bundle]['js'],
-                style: bundle => manifest[bundle]['css']
+                scriptSource: bundle => manifest[bundle]['js'],
+                styleSource: bundle => manifest[bundle]['css'],
+                script: bundle => `<script src="${manifest[bundle]['js']}" />`
             }
         }
     }

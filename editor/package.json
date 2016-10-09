@@ -4,7 +4,9 @@
   "description": "Graph editor for the craftdb project",
   "main": "dist/app.js",
   "dependencies": {
+    "chokidar": "^1.6.0",
     "extend": "^3.0.0",
+    "filecache": "^0.2.2",
     "glob": "^7.0.6",
     "koa": "^2.0.0",
     "koa-cache-control": "^1.0.0",

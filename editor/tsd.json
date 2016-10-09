@@ -9,7 +9,7 @@
       "commit": "55c3e254e151847b8d37ca09b1a566ad4a48a66a"
     },
     "node/node.d.ts": {
-      "commit": "88c0d5f868bc184d70b6799d36b1946787beb48d"
+      "commit": "e623c6b3164bb8c6da508f84f7865eaaa97e1a0f"
     },
     "koa-mount/koa-mount.d.ts": {
       "commit": "55c3e254e151847b8d37ca09b1a566ad4a48a66a"
@@ -25,6 +25,9 @@
     },
     "minimatch/minimatch.d.ts": {
       "commit": "88c0d5f868bc184d70b6799d36b1946787beb48d"
+    },
+    "chokidar/chokidar.d.ts": {
+      "commit": "e623c6b3164bb8c6da508f84f7865eaaa97e1a0f"
     }
   }
 }
