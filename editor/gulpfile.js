@@ -20,9 +20,6 @@ var sourcemaps = require('gulp-sourcemaps');
 
 var stylus = require('gulp-stylus');
 
-var jspmBuild = require('gulp-jspm-build');
-var gulpJspm = require('gulp-jspm');
-
 var shell = require('gulp-shell');
 
 var config = {
@@ -134,22 +131,6 @@ gulp.task('pug', function () {
 });
 
 gulp.task('bundle', shell.task('$(npm bin)/webpack'));
-
-// gulp.task('bundle', function(){
-//     // return jspmBuild({
-//     //    config: './src/client/system.config.js'
-//     // });
-//
-//    // return jspmBuild({
-//    //     bundles: [
-//    //         {src: 'scripts/client/app.js', dst: 'scripts/client/main-bundle.js'}
-//    //     ]
-//    // }).pipe(gulp.dest('.www'));
-//
-//     // return gulp.src('.www/scripts/client/app.js')
-//     //     .pipe(gulpJspm())
-//     //     .pipe(gulp)
-// });
 
 gulp.task('tidy-when-done', function () {
     return del(config.tempDirectory);
