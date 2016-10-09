@@ -4,6 +4,7 @@ var failPlugin = require('webpack-fail-plugin');
 
 module.exports = {
     //context: path.join(__dirname, './.ww')
+    devtool: 'source-map',
     entry: {
         js: './src/client/app.ts'
     },
