@@ -10,8 +10,7 @@ module.exports = {
     },
     output: {
         path: './.www/scripts/client/',
-        publicPath: '/scripts/client/',
-        filename: 'main-bundle-webpack.js'
+        publicPath: '/scripts/client/'
     },
     resolve: {
         extensions: ['.ts', '.js'],
@@ -24,6 +23,11 @@ module.exports = {
         ]
     },
     plugins: [
-        failPlugin
+        failPlugin,
+        new webpack.optimize.UglifyJsPlugin({
+            minimize: true,
+            sourceMap: true,
+            output: {comments: false}
+        })
     ]
 };
