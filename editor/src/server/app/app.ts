@@ -32,10 +32,6 @@ app.use((ctx: Koa.Context, next)=> {
 });
 app.use(serveStatic('.www', serveStaticOptions));
 
-const jspm: Koa = new Koa();
-jspm.use(serveStatic('jspm_packages', serveStaticOptions));
-app.use(mount('/jspm_packages', jspm));
-
 var mvc = new Mvc();
 mvc.registerAreas(__dirname, ['/admin', '/home'], {
     views: {
