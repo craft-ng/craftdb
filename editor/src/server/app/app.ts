@@ -5,6 +5,8 @@ import zlib = require('zlib');
 const serveStatic = require('koa-static');
 const compress = require('koa-compress');
 
+const manifest = require('../../../webpack-assets.json');
+
 var serveStaticOptions = {
     maxAge: 30,
     buffer: true
@@ -31,7 +33,16 @@ var mvc = new Mvc();
 mvc.registerAreas(__dirname, ['/admin', '/home'], {
     views: {
         extension: 'pug',
-        engine: 'pug'
+        engine: 'pug',
+        templateOptions: {
+            meta: {
+                manifest: manifest,
+            },
+            render: {
+                script: bundle => manifest[bundle]['js'],
+                style: bundle => manifest[bundle]['css']
+            }
+        }
     }
 });
 app.use(mvc.routes());

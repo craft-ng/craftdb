@@ -19,7 +19,8 @@ class Mvc {
                     var viewSearchDirectory = path.join(area.applicationRootPath, area.areaPath, area.options.views.convention);
                     return views(viewSearchDirectory, {
                         map: { [area.options.views.extension]: area.options.views.engine },
-                        extension: area.options.views.extension
+                        extension: area.options.views.extension,
+                        options: area.options.views.templateOptions
                     });
                 }
             }

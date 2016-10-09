@@ -1,16 +1,18 @@
 var webpack = require('webpack');
 var path = require('path');
 var failPlugin = require('webpack-fail-plugin');
+var AssetsPlugin = require('assets-webpack-plugin');
 
 module.exports = {
     //context: path.join(__dirname, './.ww')
     devtool: 'source-map',
     entry: {
-        js: './src/client/app.ts'
+        main: './src/client/app.ts'
     },
     output: {
         path: './.www/scripts/client/',
-        publicPath: '/scripts/client/'
+        publicPath: '/scripts/client/',
+        filename: '[name].[chunkhash].js'
     },
     resolve: {
         extensions: ['.ts', '.js'],
@@ -28,6 +30,9 @@ module.exports = {
             minimize: true,
             sourceMap: true,
             output: {comments: false}
+        }),
+        new AssetsPlugin({
+            path: './.dist/'
         })
     ]
 };

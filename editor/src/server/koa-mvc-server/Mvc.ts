@@ -32,6 +32,7 @@ export interface MvcOptions {
         extension?: string;
         engine?: string;
         middleware?: (area: RegisteredArea)=>KoaMiddleware;
+        templateOptions?: any
     };
     middleware?: Array<(area: RegisteredArea)=>KoaMiddleware>;
 }
@@ -57,7 +58,8 @@ export class Mvc {
 
                     return views(viewSearchDirectory, {
                         map: {[area.options.views.extension]: area.options.views.engine},
-                        extension: area.options.views.extension
+                        extension: area.options.views.extension,
+                        options: area.options.views.templateOptions
                     });
                 }
             }
