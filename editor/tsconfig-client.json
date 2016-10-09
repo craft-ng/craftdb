@@ -4,9 +4,11 @@
     "target": "es5",
     "sourceMap": true,
     "rootDir": "src",
-    "allowJs": true
+    "allowJs": true,
+    "lib": ["es5", "dom", "es2015.promise"]
   },
   "include": [
+    "typings/augmentation-client.d.ts",
     "src/*.ts",
     "src/*.js",
     "src/client/**/*.ts",

@@ -10,7 +10,8 @@ var browserSync = require('browser-sync').create();
 
 var ts = require('./gulp-typescript')
 //var ts = require('gulp-typescript');
-var tsCommonOptions = {}; //{typescript: require('typescript')};
+//var tsCommonOptions = {}; //{typescript: require('typescript')};
+var tsCommonOptions = {typescript: require('typescript')};
 
 var tsServerProject = ts.createProject('tsconfig.json', tsCommonOptions);
 var tsClientProject = ts.createProject('tsconfig-client.json', tsCommonOptions);

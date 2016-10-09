@@ -1,1 +1,0 @@
-{"version":3,"sources":["common/common.ts"],"names":[],"mappings":";AAAA,aAAoB,CAAS,EAAE,CAAS;IAEpC,MAAM,CAAC,IAAI,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC,CAAC;AAC1B,CAAC;AAHe,WAAG,MAGlB,CAAA","file":"common/common.js","sourcesContent":["export function pow(a: number, b: number): number {\n\n    return Math.pow(a, b);\n}"],"sourceRoot":"/src"}
