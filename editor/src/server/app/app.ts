@@ -26,7 +26,7 @@ app.use(compress({
 }));
 app.use((ctx: Koa.Context, next)=> {
     return next().then(() => {
-        //ctx.set('Cache-Control', 'max-age=10');
+        ctx.set('Cache-Control', 'max-age=31536000'); // 1 year
     });
     // ctx.set('Cache-Control', 'no-cache');
 });
